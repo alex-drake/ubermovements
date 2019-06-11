@@ -1,0 +1,11 @@
+select sum(a.wtd_mn_spd) as sum_mn_spd,
+	sum(a.wtd_spd_std) as sum_std_spd,
+	a.segment_id
+from
+(select (cast(speed_mph_mean as float) * (1/cast(speed_mph_stddev as float))) as wtd_mn_spd,
+	(1/cast(speed_mph_stddev as float)) as wtd_spd_std,
+	segment_id
+	from [dbo].[hourly_speeds]
+	where month = 6 and
+	[hour] in (20,21,22,23,0,1,2,3,4,5,6)) a
+group by a.segment_id
